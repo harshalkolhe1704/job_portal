@@ -1,7 +1,4 @@
-/create_admin.py
-/debug_db.py
-/init_tables.py
-/migrate_db.py
+
 /README.md
 /requirements.txt
 /setup_db.py
