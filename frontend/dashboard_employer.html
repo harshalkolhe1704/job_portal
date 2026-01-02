@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Dashboard - JobHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="background: #f8fafc;">
+
+    <nav class="navbar">
+        <a href="#" class="logo">JobHub.</a>
+        <div class="nav-links" style="display: flex; align-items: center; gap: 1rem;">
+            <div class="profile-trigger" onclick="openProfileModal()">
+                <div class="avatar" id="userAvatar">?</div>
+                <span id="userName" style="font-weight: 500;">Employer</span>
+            </div>
+            <button onclick="logout()" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2.5rem;">
+
+            <!-- Left Col: Post Job Form -->
+            <div class="card" style="height: fit-content;">
+                <h2 style="margin-bottom: 1.5rem;">Post a New Job</h2>
+                <form onsubmit="handlePostJob(event)" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Job Title</label>
+                        <input type="text" name="title" class="form-control" required
+                            placeholder="e.g. Senior Backend Engineer">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Location</label>
+                        <input type="text" name="location" class="form-control" required
+                            placeholder="e.g. Remote or San Francisco">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Job Type</label>
+                            <select name="job_type" class="form-control">
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Internship">Internship</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Salary Range</label>
+                            <input type="text" name="salary_range" class="form-control"
+                                placeholder="e.g. $100k - $150k">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Closing Date (Deadline)</label>
+                        <input type="date" name="closing_date" class="form-control">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" rows="5" required
+                            placeholder="Describe the role, requirements, and benefits..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">Create Job
+                        Posting</button>
+                </form>
+            </div>
+
+            <!-- Right Col: Manage Jobs -->
+            <div>
+                <h2 style="margin-bottom: 1.5rem;">My Active Job Postings</h2>
+                <div id="jobsList" class="card-grid" style="grid-template-columns: 1fr; margin-top: 0;">
+                    <!-- Jobs loaded here -->
+                    <p class="text-muted">Loading your job postings...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Job Modal -->
+    <div id="editJobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Job Posting</h3>
+                <button onclick="closeEditModal()" class="close-btn">&times;</button>
+            </div>
+            <form onsubmit="handleUpdateJob(event)" id="editJobForm"
+                style="display: flex; flex-direction: column; gap: 1.25rem;">
+                <input type="hidden" name="id" id="editJobId">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Job Title</label>
+                    <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Location</label>
+                    <input type="text" name="location" class="form-control" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Job Type</label>
+                        <select name="job_type" class="form-control">
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Internship">Internship</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Salary Range</label>
+                        <input type="text" name="salary_range" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Closing Date (Deadline)</label>
+                    <input type="date" name="closing_date" id="editClosingDate" class="form-control">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="5" required></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Update Job</button>
+                    <button type="button" onclick="closeEditModal()" class="btn btn-secondary"
+                        style="flex: 1;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Company Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Company Profile</h3>
+                <button onclick="closeProfileModal()" class="close-btn">&times;</button>
+            </div>
+            <form onsubmit="handleUpdateProfile(event)" id="profileForm" class="profile-form-grid">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" name="company_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Headquarters Location</label>
+                    <input type="text" name="location" class="form-control">
+                </div>
+                <div class="form-group col-span-2">
+                    <label>Company Website</label>
+                    <input type="url" name="website" class="form-control" placeholder="https://www.yourcompany.com">
+                </div>
+                <div class="form-group col-span-2">
+                    <label>Company Description</label>
+                    <textarea name="company_description" class="form-control" rows="4"
+                        placeholder="Tell us about your company..."></textarea>
+                </div>
+                <div class="col-span-2" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Update Profile</button>
+                    <button type="button" onclick="closeProfileModal()" class="btn btn-secondary"
+                        style="flex: 1;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Applicants Modal -->
+    <div id="applicantsModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>Job Applicants</h3>
+                <button onclick="closeModal()" class="close-btn">&times;</button>
+            </div>
+            <div id="applicantsList" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <!-- Applicants loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard_employer.js"></script>
+</body>
+
+</html>

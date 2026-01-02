@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seeker Dashboard - JobHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="background: #f8fafc;">
+
+    <nav class="navbar">
+        <a href="#" class="logo">JobHub.</a>
+        <div class="nav-links" style="display: flex; align-items: center; gap: 1rem;">
+            <div class="profile-trigger" onclick="openProfileModal()">
+                <div class="avatar" id="userAvatar">?</div>
+                <span id="userName" style="font-weight: 500;">User</span>
+            </div>
+            <button onclick="logout()" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div style="display: flex; gap: 2.5rem;">
+            <!-- Job Search Section -->
+            <div style="flex: 2;">
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h2>Find your next opportunity</h2>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <input type="text" id="searchTitle" class="form-control" placeholder="Job title, keywords...">
+                        <input type="text" id="searchLocation" class="form-control" placeholder="City or Remote...">
+                        <button onclick="loadJobs()" class="btn btn-primary"
+                            style="padding-left: 2rem; padding-right: 2rem;">Search Jobs</button>
+                    </div>
+                </div>
+
+                <div id="jobsList" class="card-grid" style="margin-top: 0;">
+                    <!-- Jobs will be loaded here -->
+                    <p class="text-muted">Loading jobs...</p>
+                </div>
+            </div>
+
+            <!-- My Applications Section -->
+            <div style="flex: 1;">
+                <div class="card" style="height: fit-content;">
+                    <h2 style="margin-bottom: 1.5rem;">My Applications</h2>
+                    <div id="applicationsList" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Applications will be loaded here -->
+                        <p class="text-muted">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>My Profile</h3>
+                <button onclick="closeProfileModal()" class="close-btn">&times;</button>
+            </div>
+            <form onsubmit="handleUpdateProfile(event)" id="profileForm" class="profile-form-grid">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="full_name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Resume Link</label>
+                    <input type="url" name="resume_link" class="form-control" placeholder="https://linkedin.com/in/...">
+                </div>
+                <div class="form-group">
+                    <label>Skills</label>
+                    <input type="text" name="skills" class="form-control" placeholder="Python, JavaScript, React">
+                </div>
+                <div class="form-group">
+                    <label>Education</label>
+                    <input type="text" name="education" class="form-control" placeholder="e.g. B.Tech in CS">
+                </div>
+                <div class="form-group col-span-2">
+                    <label>Experience</label>
+                    <textarea name="experience" class="form-control" rows="4"
+                        placeholder="Briefly describe your work history..."></textarea>
+                </div>
+                <div class="col-span-2" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                    <button type="button" onclick="closeProfileModal()" class="btn btn-secondary"
+                        style="flex: 1;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard_seeker.js"></script>
+</body>
+
+</html>

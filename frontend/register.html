@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - JobHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="background: #f1f5f9;">
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">JobHub.</a>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2 id="registerTitle">Create Account</h2>
+
+            <div
+                style="display: flex; background: #e2e8f0; border-radius: 0.5rem; padding: 0.25rem; margin-bottom: 2rem;">
+                <button onclick="setRegisterRole('seeker')" id="seekerTab"
+                    style="flex: 1; border: none; padding: 0.5rem; border-radius: 0.4rem; cursor: pointer; font-weight: 500; background: var(--primary); color: white;">Job
+                    Seeker</button>
+                <button onclick="setRegisterRole('employer')" id="employerTab"
+                    style="flex: 1; border: none; padding: 0.5rem; border-radius: 0.4rem; cursor: pointer; font-weight: 500; background: transparent; color: #64748b;">Employer</button>
+            </div>
+
+            <form onsubmit="handleRegister(event)">
+                <input type="hidden" name="role" id="roleInput" value="seeker">
+
+                <div class="form-group">
+                    <label id="nameLabel">Full Name</label>
+                    <input type="text" name="name_or_company" class="form-control" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" required placeholder="••••••••">
+                </div>
+                <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%;">Sign Up as
+                    Seeker</button>
+            </form>
+            <p class="text-center mt-4 text-sm text-muted">
+                Already have an account? <a href="login.html" style="color: var(--primary);">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check URL for role param
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role');
+        if (role) {
+            setRegisterRole(role);
+        }
+
+        function setRegisterRole(role) {
+            const seekerTab = document.getElementById('seekerTab');
+            const employerTab = document.getElementById('employerTab');
+            const roleInput = document.getElementById('roleInput');
+            const nameLabel = document.getElementById('nameLabel');
+            const nameInput = document.getElementsByName('name_or_company')[0];
+            const submitBtn = document.getElementById('submitBtn');
+            const registerTitle = document.getElementById('registerTitle');
+
+            roleInput.value = role;
+
+            if (role === 'employer') {
+                employerTab.style.background = 'var(--secondary)';
+                employerTab.style.color = 'white';
+                seekerTab.style.background = 'transparent';
+                seekerTab.style.color = '#64748b';
+
+                nameLabel.innerText = 'Company Name';
+                nameInput.placeholder = 'Acme Inc.';
+                submitBtn.innerText = 'Sign Up as Employer';
+                registerTitle.innerText = 'Employer Registration';
+            } else {
+                seekerTab.style.background = 'var(--primary)';
+                seekerTab.style.color = 'white';
+                employerTab.style.background = 'transparent';
+                employerTab.style.color = '#64748b';
+
+                nameLabel.innerText = 'Full Name';
+                nameInput.placeholder = 'John Doe';
+                submitBtn.innerText = 'Sign Up as Seeker';
+                registerTitle.innerText = 'Job Seeker Registration';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,6 +1,5 @@
 /create_admin.py
 /debug_db.py
-/frontend
 /init_tables.py
 /migrate_db.py
 /README.md

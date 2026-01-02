@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - JobHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="background: #f1f5f9;">
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">JobHub.</a>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2 id="loginTitle">Welcome Back</h2>
+
+            <div
+                style="display: flex; background: #e2e8f0; border-radius: 0.5rem; padding: 0.25rem; margin-bottom: 2rem;">
+                <button onclick="setLoginRole('seeker')" id="seekerTab"
+                    style="flex: 1; border: none; padding: 0.5rem; border-radius: 0.4rem; cursor: pointer; font-weight: 500; background: var(--primary); color: white;">Job
+                    Seeker</button>
+                <button onclick="setLoginRole('employer')" id="employerTab"
+                    style="flex: 1; border: none; padding: 0.5rem; border-radius: 0.4rem; cursor: pointer; font-weight: 500; background: transparent; color: #64748b;">Employer</button>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" required placeholder="••••••••">
+                </div>
+                <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%;">Sign In as
+                    Seeker</button>
+            </form>
+            <p class="text-center mt-4 text-sm text-muted">
+                Don't have an account? <a href="register.html" id="signupLink" style="color: var(--primary);">Sign
+                    up</a>
+            </p>
+            <div id="adminLinkContainer"
+                style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem; text-align: center;">
+                <a href="#" onclick="setLoginRole('admin')" class="text-xs text-muted"
+                    style="text-decoration: none;">Are you an Admin? Click here to Login</a>
+            </div>
+        </div>
+    </div>
+
+    <footer style="margin-top: 2rem; padding: 2rem 5%; text-align: center;">
+        <p class="text-sm text-muted">&copy; 2026 JobHub. All rights reserved.</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        if (isLoggedIn()) {
+            const role = getUserRole();
+            window.location.href = `dashboard_${role}.html`;
+        }
+
+        let currentRole = 'seeker';
+
+        function setLoginRole(role) {
+            currentRole = role;
+            const seekerTab = document.getElementById('seekerTab');
+            const employerTab = document.getElementById('employerTab');
+            const submitBtn = document.getElementById('submitBtn');
+            const loginTitle = document.getElementById('loginTitle');
+            const signupLink = document.getElementById('signupLink');
+            const adminLink = document.getElementById('adminLinkContainer');
+
+            // Reset tabs
+            seekerTab.style.background = 'transparent';
+            seekerTab.style.color = '#64748b';
+            employerTab.style.background = 'transparent';
+            employerTab.style.color = '#64748b';
+
+            if (role === 'seeker') {
+                seekerTab.style.background = 'var(--primary)';
+                seekerTab.style.color = 'white';
+                submitBtn.innerText = 'Sign In as Seeker';
+                loginTitle.innerText = 'Scholar/Job Seeker Login';
+                signupLink.href = 'register.html';
+                signupLink.innerText = "Sign up";
+                adminLink.style.display = "block";
+            } else if (role === 'employer') {
+                employerTab.style.background = 'var(--secondary)';
+                employerTab.style.color = 'white';
+                submitBtn.innerText = 'Sign In as Employer';
+                loginTitle.innerText = 'Employer/Recruiter Login';
+                signupLink.href = 'register.html?role=employer';
+                signupLink.innerText = "Sign up";
+                adminLink.style.display = "block";
+            } else if (role === 'admin') {
+                submitBtn.innerText = 'Sign In as Administrator';
+                loginTitle.innerText = 'Admin Management Portal';
+                signupLink.innerText = "Back to Home";
+                signupLink.href = 'index.html';
+                adminLink.style.display = "none";
+            }
+        }
+
+        // Check URL for role preference
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleParam = urlParams.get('role');
+        if (roleParam && ['seeker', 'employer', 'admin'].includes(roleParam)) {
+            setLoginRole(roleParam);
+        }
+    </script>
+</body>
+
+</html>
